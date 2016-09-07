@@ -1,7 +1,7 @@
 #include <iostream>
 #include <mapbox/variant.hpp>
 
-typedef mapbox::util::variant<int, bool, std::string, float, long, uint64_t> frame;
+
 
 //namespace boost {
 //  template<class ResultType>
@@ -16,10 +16,9 @@ namespace boost {
 }
 
 
-
-
-
 #include <boost/spirit/include/karma.hpp>
+
+typedef mapbox::util::variant<int, bool, std::string, float, long, uint64_t> frame;
 
 
 template <class T, class... Types>
@@ -55,9 +54,7 @@ namespace boost { namespace spirit { namespace traits {
     {
         static int call(mapbox::util::variant<Types...> const& v)
         {
-            auto idx = v.which(); //sizeof...(Types) - v.which() - 1;
-            std::cout << "Returning current type index " << idx << std::endl;
-            return idx;
+            return v.which();
         }
     };
 
@@ -83,10 +80,8 @@ namespace boost { namespace spirit { namespace traits {
         // return whether the given type is compatible with the Expected type
         static bool is_compatible(int which)
         {
-          std::cout << "Size is :" << type::size << std::endl;
           auto idx = (type::size - 1 - type::index); // Typelist is inverted and 0-based
-          std::cout << "We check if they are compatible " << idx << "-" << typeid(Expected).name() << " and " << which << std::endl;
-            return which == idx;
+          return which == idx;
         }
     };
 
