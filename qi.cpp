@@ -7,8 +7,8 @@ typedef mapbox::util::variant<int, bool, std::string> frame;
 
 namespace boost { namespace spirit { namespace traits
 {
-    template <typename Domain>
-    struct not_is_variant<frame, Domain>
+    template <typename Domain, class... Types>
+    struct not_is_variant<mapbox::util::variant<Types...>, Domain>
       : mpl::false_
     {};
 }
@@ -17,8 +17,8 @@ namespace boost { namespace spirit { namespace traits
 
 namespace boost { namespace spirit { namespace qi { namespace detail
 {
-    template <typename Expected>
-    struct find_substitute<frame, Expected>
+    template <typename Expected, class... Types>
+    struct find_substitute<mapbox::util::variant<Types...>, Expected>
     {
         // Get the typr from the variant that can be a substitute for Expected.
         // If none is found, just return Expected

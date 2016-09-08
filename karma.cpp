@@ -1,16 +1,6 @@
 #include <iostream>
 #include <mapbox/variant.hpp>
 
-
-
-//namespace boost {
-//  template<class ResultType>
-//  inline ResultType get(frame const& x) {
-//    std::cout << "We are getting out of the vairant : " << typeid(ResultType).name() << std::endl;
-//    return mapbox::util::get<ResultType>(x);
-//  }
-//}
-
 namespace boost {
   using mapbox::util::get;
 }
@@ -20,6 +10,15 @@ namespace boost {
 
 typedef mapbox::util::variant<int, bool, std::string, float, long, uint64_t> frame;
 
+template <class... Types>
+struct is_mapbox_variant {
+  using type = std::false_type;
+};
+
+template <class... Types>
+struct is_mapbox_variant<mapbox::util::variant<Types...>> {
+  using type = std::true_type;
+};
 
 template <class T, class... Types>
 struct is_in_type_list;
@@ -40,8 +39,8 @@ struct is_in_type_list<T, mapbox::util::variant<Types...>> {
 
 namespace boost { namespace spirit { namespace traits
 {
-    template <typename Domain>
-    struct not_is_variant<frame, Domain>
+    template <typename Domain, class... Types>
+    struct not_is_variant<mapbox::util::variant<Types...>, Domain>
       : mpl::false_
     {};
 }
@@ -64,7 +63,7 @@ namespace boost { namespace spirit { namespace traits {
 
     template <typename Variant, typename Expected>
     struct compute_compatible_component_variant<Variant, Expected, mpl::false_
-      , typename enable_if< is_same<Variant,frame> >::type>
+      , typename enable_if< typename is_mapbox_variant<Variant>::type >::type>
     {
         typedef typename traits::variant_type<Variant>::type variant_type;
 
