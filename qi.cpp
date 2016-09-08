@@ -1,34 +1,10 @@
 #include <iostream>
-#include <mapbox/variant.hpp>
 
+#include <mapbox/variant.hpp>
+#include <mapbox/boost_spirit_qi.hpp>
 #include <boost/spirit/include/qi.hpp>
 
 typedef mapbox::util::variant<int, bool, std::string> frame;
-
-namespace boost { namespace spirit { namespace traits
-{
-    template <typename Domain, class... Types>
-    struct not_is_variant<mapbox::util::variant<Types...>, Domain>
-      : mpl::false_
-    {};
-}
-}}
-
-
-namespace boost { namespace spirit { namespace qi { namespace detail
-{
-    template <typename Expected, class... Types>
-    struct find_substitute<mapbox::util::variant<Types...>, Expected>
-    {
-        // Get the typr from the variant that can be a substitute for Expected.
-        // If none is found, just return Expected
-
-        typedef Expected type;
-    };
-}}}}
-
-
-
 
 struct visitor {
     template <typename T>

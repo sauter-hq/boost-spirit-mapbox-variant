@@ -1,4 +1,32 @@
-# Using Mapbox Variant insteads of Boost.Variant
+# mapbox::variant for Boost.Spirit Qi and Boost.Spirit Karma
+This defines the traits you need to use mapbox::variant in place of Boost.Variant with Boost.Spirit
+
+## HowTo: Qi
+```cpp
+#include <mapbox/variant.hpp>
+#include <mapbox/boost_spirit_qi.hpp>
+#include <boost/spirit/include/qi.hpp>
+
+...
+
+using namespace boost::spirit::qi;
+rule<Iterator, mapbox::util::variant<int, bool>()> r = int_ | bool_;
+```
+
+## HowTo: Karma
+```cpp
+#include <mapbox/variant.hpp>
+#include <mapbox/boost_spirit_karma.hpp>
+#include <boost/spirit/include/karma.hpp>
+
+...
+
+using namespace boost::spirit::karma;
+rule<Iterator, mapbox::util::variant<int, bool>()> r = int_ | bool_;
+```
+
+
+### Benchmark
 
 The same program with Boost.Spirit and a MapBox.Variant instead of a Boost.Variant results in good improvements in terms of Binary Sizes.
 
